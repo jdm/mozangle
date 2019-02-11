@@ -47,6 +47,10 @@ fn build_angle() {
         }
     }
 
+    if target.contains("windows") {
+        build.shared_flag(true);
+    }
+
     build
         .file("src/shaders/glslang-c.cpp")
         .cpp(true)
