@@ -1,5 +1,6 @@
 extern crate cc;
 #[cfg(feature = "egl")] extern crate gl_generator;
+extern crate walkdir;
 
 use std::env;
 use std::path::PathBuf;
@@ -60,7 +61,10 @@ fn build_angle() {
         println!("cargo:rustc-link-lib={}", lib);
     }
     println!("cargo:rerun-if-changed=src/shaders/glslang-c.cpp");
-    println!("cargo:rerun-if-changed=gfx");
+    for entry in walkdir::WalkDir::new("gfx") {
+        let entry = entry.unwrap();
+        println!("{}", format!("cargo:rerun-if-changed={}", entry.path().display()));
+    }
 }
 
 fn fixup_path(path: &str) -> String {
